@@ -22,11 +22,12 @@ class LowPoly {
     });
   }
 
-  static play(that, geometry) {
+  static create(that, geometryGenerator) {
     const data = that.data,
           el = that.el;
 
     let material = el.components.material;
+    let geometry = geometryGenerator(data);
     geometry.mergeVertices();
     LowPoly.randomizeVertices(data, geometry);
 

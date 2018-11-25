@@ -24,20 +24,12 @@ AFRAME.registerComponent('low-poly-sphere', {
     widthSegments: {default: 5}
   }),
 
-  /**
-   * Use play() instead of init(), because component mappings – unavailable as dependencies – are
-   * not guaranteed to have parsed when this component is initialized.
-   */
   play: function() {
-    const data = this.data;
-    const geometry = new THREE.SphereGeometry(data.radius, data.widthSegments, data.heightSegments);
-    LowPoly.play(this, geometry);
-
-    this.geometry = geometry;
+    LowPoly.create(this, createSphereGeometry);
   },
 
-  update: function(oldData) {
-    LowPoly.update(oldData, this.data, this.geometry);
+  update: function() {
+    LowPoly.create(this, createSphereGeometry);
   },
 
   remove: function () {
@@ -45,3 +37,7 @@ AFRAME.registerComponent('low-poly-sphere', {
   },
 
 });
+
+function createSphereGeometry(data) {
+  return new THREE.SphereGeometry(data.radius, data.widthSegments, data.heightSegments);
+}

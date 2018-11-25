@@ -26,20 +26,12 @@ AFRAME.registerComponent('low-poly-plane', {
     heightSegments: {default: 10},
   }),
 
-  /**
-   * Use play() instead of init(), because component mappings – unavailable as dependencies – are
-   * not guaranteed to have parsed when this component is initialized.
-   */
   play: function() {
-    const data = this.data;
-    const geometry = new THREE.PlaneGeometry(data.width, data.height, data.widthSegments, data.heightSegments);
-    LowPoly.play(this, geometry);
-
-    this.geometry = geometry;
+    LowPoly.create(this, createPlaneGeometry);
   },
 
-  update: function(oldData) {
-    LowPoly.update(oldData, this.data, this.geometry);
+  update: function() {
+    LowPoly.create(this, createPlaneGeometry);
   },
 
   remove: function () {
@@ -47,3 +39,7 @@ AFRAME.registerComponent('low-poly-plane', {
   },
 
 });
+
+function createPlaneGeometry(data) {
+  return new THREE.PlaneGeometry(data.width, data.height, data.widthSegments, data.heightSegments);
+}

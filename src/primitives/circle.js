@@ -22,20 +22,12 @@ AFRAME.registerComponent('low-poly-circle', {
     segments: {default: 10},
   }),
 
-  /**
-   * Use play() instead of init(), because component mappings – unavailable as dependencies – are
-   * not guaranteed to have parsed when this component is initialized.
-   */
   play: function() {
-    const data = this.data;
-    const geometry = new THREE.CircleGeometry(data.radius, data.segments);
-    LowPoly.play(this, geometry);
-
-    this.geometry = geometry;
+    LowPoly.create(this, createCircleGeometry);
   },
 
-  update: function(oldData) {
-    LowPoly.update(oldData, this.data, this.geometry);
+  update: function() {
+    LowPoly.create(this, createCircleGeometry);
   },
 
   remove: function () {
@@ -43,3 +35,7 @@ AFRAME.registerComponent('low-poly-circle', {
   },
 
 });
+
+function createCircleGeometry(data) {
+  return new THREE.CircleGeometry(data.radius, data.segments);
+}

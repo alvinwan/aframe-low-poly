@@ -28,21 +28,12 @@ AFRAME.registerComponent('low-poly-cone', {
     heightSegments: {default: 10},
   }),
 
-  /**
-   * Use play() instead of init(), because component mappings – unavailable as dependencies – are
-   * not guaranteed to have parsed when this component is initialized.
-   */
   play: function() {
-    const data = this.data;
-    const geometry = new THREE.CylinderGeometry(
-      data.topRadius, data.bottomRadius, data.height, data.radialSegments, data.heightSegments);
-    LowPoly.play(this, geometry);
-
-    this.geometry = geometry;
+    LowPoly.create(this, createCylinderGeometry);
   },
 
-  update: function(oldData) {
-    LowPoly.update(oldData, this.data, this.geometry);
+  update: function() {
+    LowPoly.create(this, createCylinderGeometry);
   },
 
   remove: function () {
@@ -50,3 +41,8 @@ AFRAME.registerComponent('low-poly-cone', {
   },
 
 });
+
+function createCylinderGeometry(data) {
+  return new THREE.CylinderGeometry(
+    data.topRadius, data.bottomRadius, data.height, data.radialSegments, data.heightSegments);
+}
