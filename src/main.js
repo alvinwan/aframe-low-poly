@@ -22,12 +22,12 @@ class LowPoly {
     });
   }
 
-  static create(that, geometryGenerator) {
+  static create(that, createGeometry) {
     const data = that.data,
           el = that.el;
 
     let material = el.components.material;
-    let geometry = geometryGenerator(data);
+    let geometry = createGeometry(data);
     geometry.mergeVertices();
     LowPoly.randomizeVertices(data, geometry);
 
@@ -77,6 +77,53 @@ class LowPoly {
     var value = vertex[key];
 
     vertex[dimension] = value + Math.sin(ang) * amp;
+  }
+}
+
+class LowPolyFactory {
+
+  static simple(geometryName, createGeometry, properties) {
+    var extendDeep = AFRAME.utils.extendDeep;
+
+    // The mesh mixin provides common material properties for creating mesh-based primitives.
+    // This makes the material component a default component and maps all the base material properties.
+    var meshMixin = AFRAME.primitives.getMeshMixin();
+
+    var defaultComponents = {};
+    var componentName = 'low-poly-' + geometryName;
+    defaultComponents[componentName] = {};
+
+    var primitiveMapping = properties.reduce(function(obj, property) {
+        obj[property.hyphenated] = componentName + '.' + property.camelCased;
+        return obj;
+    }, {});
+    var componentSchema = properties.reduce(function(obj, property) {
+        obj[property.camelCased] = property.schemaValue;
+        return obj;
+    }, {});
+
+    AFRAME.registerPrimitive('lp-' + geometryName, extendDeep({}, meshMixin, {
+      // Preset default components. These components and component properties will be attached to the entity out-of-the-box.
+      defaultComponents: defaultComponents,
+      mappings: LowPoly.addMappings(componentName, primitiveMapping)
+    }));
+
+    AFRAME.registerComponent(componentName, {
+      schema: LowPoly.addSchema(componentSchema),
+
+      play: function() {
+        LowPoly.create(this, createGeometry);
+      },
+
+      update: function() {
+        LowPoly.create(this, createGeometry);
+      },
+
+      remove: function () {
+        this.el.removeObject3D('mesh');
+      },
+
+    });
   }
 }
 
