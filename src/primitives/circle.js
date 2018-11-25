@@ -30,6 +30,12 @@ AFRAME.registerComponent('low-poly-circle', {
     const data = this.data;
     const geometry = new THREE.CircleGeometry(data.radius, data.segments);
     LowPoly.play(this, geometry);
+
+    this.geometry = geometry;
+  },
+
+  update: function(oldData) {
+    LowPoly.update(oldData, this.data, this.geometry);
   },
 
   remove: function () {

@@ -1,0 +1,73 @@
+
+<!-- Created by Alvin Wan (alvinwan.com) -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Stylized Low Poly Tree in Virtual Reality</title>
+    <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="../src/main.js"></script>
+    <script src="../src/primitives/sphere.js"></script>
+    <script src="../src/primitives/plane.js"></script>
+    <script src="../src/primitives/cone.js"></script>
+    <!-- Google Analytics -->
+    <script>
+      $(document).ready(function() {
+        var t =0;
+        setInterval(function() {
+          $('.foliage').each(function() {
+            t += 1;
+            seed = 'seed' + t;
+            $(this).attr('seed', seed);
+            console.log(seed);
+          })
+        }, 1000);
+      })
+    </script>
+  </head>
+  <body>
+    <a-scene fog="type: linear; color: #333; near:5; far:15">
+
+      <a-sky color="#333"></a-sky>
+
+      <!-- Mixins -->
+      <a-assets>
+        <a-mixin id="foliage" material="color:#849812"></a-mixin>
+        <a-mixin id="foliage-light" material="color:#AFC91B"></a-mixin>
+      </a-assets>
+
+      <!-- Lights! -->
+      <a-entity light="
+          type: directional;
+          castShadow: true;
+          intensity: 0.4;
+          color: #FFF;"
+        position="5 3 1"></a-entity>
+      <a-light intensity="0.8" type="ambient" position="1 1 1" color="#FFF"></a-light>
+
+      <!-- Camera! -->
+      <a-entity id="rig" position="0 1 3">
+        <a-camera wasd-controls look-controls></a-camera>
+      </a-entity>
+
+      <!-- Action! -->
+      <a-box shadow width="50" height="0.1" depth="30" position="0 -1 0" color="#666"></a-box>
+      <a-entity id="carousel">
+        <a-entity id="tree1" shadow>
+          <a-sphere color="#A5602D" rotation="90 0 0" phi-length="180">
+            <a-circle side="back" color="#A5602D"></a-circle>
+            <lp-plane position="0 0 0" side="double" mixin="foliage"></lp-plane>
+          </a-sphere>
+          <a-entity class="tree" position="0 1 0">
+            <lp-cone class="trunk" radius-top="0.05" radius-bottom="0.1" height="2" color="#A5602D"></lp-cone>
+            <lp-cone class="foliage" radius-top="0" radius-bottom="0.35" height="1" segments-height="5" amplitude="0.02" amplitude-variance="0.01" mixin="foliage" position="0 1.4 0"></lp-cone>
+            <lp-cone class="foliage" radius-top="0.1" radius-bottom="0.5" height="0.8" segments-height="3" amplitude-variance="0.01" mixin="foliage" position="0 0.8 0" seed="1"></lp-cone>
+            <lp-cone class="foliage" radius-top="0.2" radius-bottom="0.6" height="0.8" segments-height="3" amplitude-variance="0.01" mixin="foliage" position="0 0.4 0" seed="2"></lp-cone>
+            <lp-cone class="foliage" radius-top="0.2" radius-bottom="0.7" height="0.8" segments-height="3" amplitude-variance="0.01" mixin="foliage" position="0 0 0" seed="3"></lp-cone>
+          </a-entity>
+        </a-entity>
+        <a-animation attribute="rotation" from="0 0 0" to="0 360 0" repeat="indefinite" dur="20000" easing="linear"></a-animation>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>

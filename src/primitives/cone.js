@@ -37,6 +37,12 @@ AFRAME.registerComponent('low-poly-cone', {
     const geometry = new THREE.CylinderGeometry(
       data.topRadius, data.bottomRadius, data.height, data.radialSegments, data.heightSegments);
     LowPoly.play(this, geometry);
+
+    this.geometry = geometry;
+  },
+
+  update: function(oldData) {
+    LowPoly.update(oldData, this.data, this.geometry);
   },
 
   remove: function () {

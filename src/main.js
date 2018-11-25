@@ -18,7 +18,7 @@ class LowPoly {
       flatShading: {default: true},
 
       // Randomness
-      seed: {default: 0},
+      seed: {default: "apples"},
     });
   }
 
@@ -28,7 +28,7 @@ class LowPoly {
 
     let material = el.components.material;
     geometry.mergeVertices();
-    LowPoly.randomizeVertices(data, geometry.vertices);
+    LowPoly.randomizeVertices(data, geometry);
 
     if (!material) {
       material = {};
@@ -45,21 +45,37 @@ class LowPoly {
     el.setObject3D('mesh', that.mesh);
   }
 
-  static randomizeVertices(data, vertices) {
+  static update(oldData, newData, geometry) {
+    if (!geometry) {
+      console.log('[ERR] Passed geometry in update is invalid.')
+      return;
+    }
+    LowPoly.randomizeVertices(newData, geometry);
+  }
+
+  static randomizeVertices(data, geometry) {
       Random.seed(data.seed);
-      for (let v, i = 0, l = vertices.length; i < l; i++) {
-        v = vertices[i];
+      for (let v, i = 0, l = geometry.vertices.length; i < l; i++) {
+        v = geometry.vertices[i];
 
         LowPoly.randomizeVertexDimension(v, 'x', data.amplitude, data.amplitudeVariance);
         LowPoly.randomizeVertexDimension(v, 'y', data.amplitude, data.amplitudeVariance);
         LowPoly.randomizeVertexDimension(v, 'z', data.amplitude, data.amplitudeVariance);
       }
+      geometry.verticesNeedUpdate = true;
   }
 
   static randomizeVertexDimension(vertex, dimension, amplitude, amplitudeVariance) {
     let ang = Random.random() * Math.PI * 2,
         amp = amplitude + Random.random() * amplitudeVariance;
-    vertex[dimension] += Math.sin(ang) * amp;
+
+    const key = 'original-' + dimension;
+    if (!(key in vertex)) {
+      vertex[key] = vertex[dimension];
+    }
+    var value = vertex[key];
+
+    vertex[dimension] = value + Math.sin(ang) * amp;
   }
 }
 
