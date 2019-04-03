@@ -26,9 +26,7 @@
     </script>
   </head>
   <body>
-    <a-scene fog="type: linear; color: #333; near:5; far:15">
-
-      <a-sky color="#333"></a-sky>
+    <a-scene fog="type: linear; color: #fff; near:5; far:15">
 
       <!-- Mixins -->
       <a-assets>
@@ -51,7 +49,7 @@
       </a-entity>
 
       <!-- Action! -->
-      <a-box shadow width="50" height="0.1" depth="30" position="0 -1 0" color="#666"></a-box>
+      <a-box shadow width="50" height="0.1" depth="40" position="0 -1 0" color="#ccc"></a-box>
       <a-entity id="carousel">
         <a-entity id="tree1" shadow>
           <a-sphere color="#A5602D" rotation="90 0 0" phi-length="180">
@@ -59,11 +57,11 @@
             <lp-plane position="0 0 0" side="double" mixin="foliage"></lp-plane>
           </a-sphere>
           <a-entity class="tree" position="0 1 0">
-            <lp-cone class="trunk" radius-top="0.05" radius-bottom="0.1" height="2" color="#A5602D"></lp-cone>
-            <lp-cone class="foliage" radius-top="0" radius-bottom="0.35" height="1" segments-height="5" amplitude="0.02" amplitude-variance="0.01" mixin="foliage" position="0 1.4 0"></lp-cone>
-            <lp-cone class="foliage" radius-top="0.1" radius-bottom="0.5" height="0.8" segments-height="3" amplitude-variance="0.01" mixin="foliage" position="0 0.8 0" seed="1"></lp-cone>
-            <lp-cone class="foliage" radius-top="0.2" radius-bottom="0.6" height="0.8" segments-height="3" amplitude-variance="0.01" mixin="foliage" position="0 0.4 0" seed="2"></lp-cone>
-            <lp-cone class="foliage" radius-top="0.2" radius-bottom="0.7" height="0.8" segments-height="3" amplitude-variance="0.01" mixin="foliage" position="0 0 0" seed="3"></lp-cone>
+            <lp-cone class="trunk" radius="0.1" height="2" color="#A5602D"></lp-cone>
+            <lp-cone class="foliage" radius="0.35" height="1" segments-height="5" amplitude="0.02" amplitude-variance="0.01" mixin="foliage" position="0 1.4 0"></lp-cone>
+            <lp-cone class="foliage" radius="0.5" height="0.8" segments-height="3" amplitude-variance="0.01" mixin="foliage" position="0 0.8 0" seed="1"></lp-cone>
+            <lp-cone class="foliage" radius="0.6" height="0.8" segments-height="3" amplitude-variance="0.01" mixin="foliage" position="0 0.4 0" seed="2"></lp-cone>
+            <lp-cone class="foliage" radius="0.7" height="0.8" segments-height="3" amplitude-variance="0.01" mixin="foliage" position="0 0 0" seed="3"></lp-cone>
           </a-entity>
         </a-entity>
         <a-animation attribute="rotation" from="0 0 0" to="0 360 0" repeat="indefinite" dur="20000" easing="linear"></a-animation>

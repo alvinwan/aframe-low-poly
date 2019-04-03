@@ -2,9 +2,9 @@ class LowPoly {
 
   static addMappings(name, mapping) {
     return Object.assign({}, mapping, {
-      amplitude: name + '.amplitude',
-      'amplitude-variance': name + '.amplitudeVariance',
-      seed: name + '.seed',
+      'amplitude'           : name + '.amplitude',
+      'amplitude-variance'  : name + '.amplitudeVariance',
+      'seed'                : name + '.seed',
     });
   }
 
@@ -93,14 +93,14 @@ class LowPolyFactory {
     var componentName = 'low-poly-' + geometryName;
     defaultComponents[componentName] = {};
 
-    var primitiveMapping = properties.reduce(function(obj, property) {
-        obj[property.hyphenated] = componentName + '.' + property.camelCased;
-        return obj;
-    }, {});
-    var componentSchema = properties.reduce(function(obj, property) {
-        obj[property.camelCased] = property.schemaValue;
-        return obj;
-    }, {});
+    var primitiveMapping = {};
+    var componentSchema = {};
+
+    for (const [key, value] of Object.entries(properties)) {
+        var keyCamelCase = hyphenatedToCamel(key);
+        primitiveMapping[key] = componentName + '.' + keyCamelCase;
+        componentSchema[keyCamelCase] = {default: value};
+    }
 
     AFRAME.registerPrimitive('lp-' + geometryName, extendDeep({}, meshMixin, {
       // Preset default components. These components and component properties will be attached to the entity out-of-the-box.
@@ -160,4 +160,22 @@ class Random {
   static random() {
     return this.random();
   }
+}
+
+/**
+ * String Utilities
+ */
+
+function capitalizeFirstLetter(string) {
+   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function lowercaseFirstLetter(string) {
+    return string.charAt(0).toLowerCase() + string.slice(1);
+}
+
+function hyphenatedToCamel(hyphenated) {
+  return lowercaseFirstLetter(hyphenated.split("-")
+   .map(token => capitalizeFirstLetter(token))
+   .join(""));
 }

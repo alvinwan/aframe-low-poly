@@ -1,12 +1,15 @@
-LowPolyFactory.simple('cone', createCylinderGeometry, [
-  {hyphenated: 'radius-top', camelCased: 'topRadius', schemaValue: {default: 1}},
-  {hyphenated: 'radius-bottom', camelCased: 'bottomRadius', schemaValue: {default: 1}},
-  {hyphenated: 'height', camelCased: 'height', schemaValue: {default: 1}},
-  {hyphenated: 'segments-radial', camelCased: 'radialSegments', schemaValue: {default: 10}},
-  {hyphenated: 'segments-height', camelCased: 'heightSegments', schemaValue: {default: 10}},
-])
+LowPolyFactory.simple('cone', createConeGeometry, {
+    'radius': 1,
+    'height': 1,
+    'segments-radial': 10,
+    'segments-height': 10,
+    'open-ended': false,
+    'theta-start': 0,
+    'theta-length': 2*Math.PI   // TODO: insert a converter from radians to deg, where?
+})
 
-function createCylinderGeometry(data) {
-  return new THREE.CylinderGeometry(
-    data.topRadius, data.bottomRadius, data.height, data.radialSegments, data.heightSegments);
+function createConeGeometry(data) {
+  return new THREE.ConeGeometry(
+    data.radius, data.height, data.segmentsRadial, data.segmentsHeight,
+    data.openEnded, data.thetaStart, data.thetaLength);
 }
