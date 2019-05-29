@@ -26,11 +26,7 @@ To get started, include the minified javascript in your a-frame project.
 
 # Usage
 
-Every low-poly object supports the following attributes:
-
-**`position-function: function(x, y, z)`**
-
-Function that accepts the vertex's *original position* and outputs the vertex's new position, or *root position*. This is applied *before* customizable randomization. All random perturbations are applied to the vertex's root position.
+Every low-poly object supports the following attributes. Modify the following attributes just like you would any other AFrame VR attribute:
 
 **`max-amplitude: <x double> <y double> <z double>`**
 
@@ -41,6 +37,10 @@ Maximum and minimum amount of perturbation allowed for each vertex. The vertex w
 **`seed`**
 
 Seed for random-number generator, allowing you to fix randomness during design
+
+**`position-function: function({x, y, z, min: {x, y, z}, max: {x, y, z}})`**
+
+Function that accepts the vertex's *original position* and outputs the vertex's new position, or *root position*. This is applied *before* customizable randomization. All random perturbations are applied to the vertex's root position.
 
 > **`max-amplitude-difference: <x double> <y double> <z double>`** *coming soon*
 >

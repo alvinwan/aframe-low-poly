@@ -16,7 +16,15 @@
     <!-- Google Analytics -->
     <script>
       $(document).ready(function() {
-        var t =0;
+        // setup "sky" so that it's sinusoidal
+        document.querySelector('#ground').setAttribute('position-function', function (position) {
+            var py = (position.y - position.min.y) / (position.max.y - position.min.y);
+            var z1 = Math.sin(py * 2 * Math.PI) * 1 + position.min.z;
+            return {x: position.x, y: position.y, z: z1}
+        });
+
+        // change seed every second
+        var t = 0;
         setInterval(function() {
           t += 1;
           seed = 'seed' + t;
@@ -68,18 +76,18 @@
           </lp-sphere>
           <a-entity class="tree" position="0 1 0">
             <lp-cylinder class="trunk reseed" radius-top="0.01" radius-bottom="0.1" height="2" color="#A5602D"></lp-cylinder>
-            <lp-cone class="reseed" radius="0.35" height="1" segments-height="5" amplitude="0.02" mixin="foliage" position="0 1.4 0"></lp-cone>
+            <lp-cone class="reseed" radius="0.35" height="1" segments-height="5" mixin="foliage" position="0 1.4 0"></lp-cone>
             <lp-cone class="reseed" radius="0.5" height="0.8" segments-height="3" mixin="foliage" position="0 0.8 0" seed="1"></lp-cone>
             <lp-cone class="reseed" radius="0.6" height="0.8" segments-height="3" mixin="foliage" position="0 0.4 0" seed="2"></lp-cone>
             <lp-cone class="reseed" radius="0.7" height="0.8" segments-height="3" mixin="foliage" position="0 0 0" seed="3"></lp-cone>
           </a-entity>
           <a-entity class="tree" scale="0.75 0.75 0.75" position="1 0.75 0">
             <lp-cylinder class="trunk reseed" radius-top="0.02" radius-bottom="0.3" height="2.5" color="#795110" position="0 0.25 0"></lp-cylinder>
-            <lp-sphere class="reseed" position="0 0.6 0" color="#59810C" radius="1" segments-width="10" segments-height="10" amplitude="0.2" low-poly-sphere></lp-sphere>
+            <lp-sphere class="reseed" position="0 0.6 0" color="#59810C" radius="1" segments-width="10" segments-height="10" low-poly-sphere></lp-sphere>
           </a-entity>
           <a-entity class="tree" scale="0.75 0.75 0.75" position="0 0.75 -1">
             <lp-cylinder class="trunk reseed" radius-top="0.02" radius-bottom="0.3" height="2.5" color="#795110" position="0 0.25 0"></lp-cylinder>
-            <lp-sphere class="reseed" position="0 0.8 0" color="#59810C" radius="1" segments-width="8" segments-height="8" amplitude="0.2" low-poly-sphere></lp-sphere>
+            <lp-sphere class="reseed" position="0 0.8 0" color="#59810C" radius="1" segments-width="8" segments-height="8" low-poly-sphere></lp-sphere>
           </a-entity>
           <a-entity class="rocks">
             <lp-sphere class="reseed" color="#666" radius="0.25" position="0 0 1"></lp-sphere>
@@ -118,6 +126,8 @@
         <lp-sphere class="reseed" color="#f4cb6b" radius="0.6"></lp-sphere>
         <a-animation attribute="position" from="2 3 0" to="2 2.5 0" direction="alternate" repeat="indefinite" dur="5000"></a-animation>
       </a-entity>
+
+      <lp-plane id="ground" color="#609af7" rotation="0 0 90" position="0 0 -3" width="10" height="10" max-amplitude="0.5 0.5 0.25"></lp-plane>
     </a-scene>
   </body>
 </html>

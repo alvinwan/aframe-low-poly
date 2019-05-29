@@ -4,6 +4,7 @@ class LowPoly {
     return Object.assign({}, mapping, {
       'max-amplitude'             : name + '.maxAmplitude',
       'min-amplitude'             : name + '.minAmplitude',
+      'position-function'         : name + '.positionFunction',
       'seed'                      : name + '.seed',
     });
   }
@@ -15,7 +16,7 @@ class LowPoly {
       // Randomness amplitude and variance.
       maxAmplitude      : {default: {x: 0.1, y: 0.1, z: 0.1}, type: 'vec3'},
       minAmplitude      : {default: {x: 0, y: 0, z: 0}, type: 'vec3'},
-      positionFunction  : {default: (x, y, z) => { return {x: x, y: y, z: z} }},
+      positionFunction  : {default: position => { return {x: position.x, y: position.y, z: position.z} }},
       amplitudePDF      : {default: p => p},
 
       // Material.
@@ -60,10 +61,12 @@ class LowPoly {
 
   static randomizeVertices(data, geometry) {
       Random.seed(data.seed);
+      var min = LowPoly.computeMinPosition(geometry.vertices);
+      var max = LowPoly.computeMaxPosition(geometry.vertices);
       for (let v, i = 0, l = geometry.vertices.length; i < l; i++) {
         v = geometry.vertices[i];
 
-        var root = LowPoly.computeRootPosition(v, data.positionFunction);
+        var root = LowPoly.computeRootPosition(v, data.positionFunction, min, max);
         LowPoly.randomizeVertexDimension(v, 'x', root.x, data.amplitudePDF, data.maxAmplitude.x, data.minAmplitude.x);
         LowPoly.randomizeVertexDimension(v, 'y', root.y, data.amplitudePDF, data.maxAmplitude.y, data.minAmplitude.y);
         LowPoly.randomizeVertexDimension(v, 'z', root.z, data.amplitudePDF, data.maxAmplitude.z, data.minAmplitude.z);
@@ -71,7 +74,29 @@ class LowPoly {
       geometry.verticesNeedUpdate = true;
   }
 
-  static computeRootPosition(vertex, positionFunction) {
+  static computeMinPosition(vertices) {
+    var min = {x: Infinity, y: Infinity, z: Infinity};
+    for (let v, i = 0, l = vertices.length; i < l; i++) {
+      v = vertices[i];
+      min.x = Math.min(v.x, min.x);
+      min.y = Math.min(v.y, min.y);
+      min.z = Math.min(v.z, min.z);
+    }
+    return min;
+  }
+
+  static computeMaxPosition(vertices) {
+    var max = {x: -Infinity, y: -Infinity, z: -Infinity};
+    for (let v, i = 0, l = vertices.length; i < l; i++) {
+      v = vertices[i];
+      max.x = Math.max(v.x, max.x);
+      max.y = Math.max(v.y, max.y);
+      max.z = Math.max(v.z, max.z);
+    }
+    return max;
+  }
+
+  static computeRootPosition(vertex, positionFunction, min, max) {
 
     ['x', 'y', 'z'].forEach(function (dimension) {
       var key = 'o' + dimension;
@@ -80,13 +105,24 @@ class LowPoly {
       }
     })
 
-    return positionFunction(vertex['ox'], vertex['oy'], vertex['oz'])
+    // TODO: hack to support funnctions in attributes... not a good idea
+    if (typeof positionFunction === 'string') {
+      eval("positionFunction = " + positionFunction);
+    }
+
+    return positionFunction({
+      x: vertex['ox'],
+      y: vertex['oy'],
+      z: vertex['oz'],
+      min: min,
+      max: max
+    })
   }
 
   static randomizeVertexDimension(vertex, dimension, root, amplitudePDF, maxAmplitude, minAmplitude) {
     let p = amplitudePDF(Random.random());
     let amp = (maxAmplitude - minAmplitude) * p + minAmplitude;
-    var value = vertex['o' + dimension];
+    var value = root;
     vertex[dimension] = value + amp;
   }
 }
