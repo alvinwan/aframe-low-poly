@@ -1,5 +1,7 @@
 # A-Frame Low Poly
 
+[View the aframe low-poly demo &raquo;](http://alvinwan.com/aframe-low-poly/demo)
+
 Low poly add-ons for a-frame virtual reality models. Take any existing a-frame
 primitive, such as `a-sphere` and replace the prefix to obtain a low-poly
 version, such as `lp-sphere`. For example, the below is a low-poly sphere
@@ -21,7 +23,7 @@ You can view the demo pictured below at [aaalv.in/vr/low-poly-trees](http://alvi
 To get started, include the minified javascript in your a-frame project.
 
 ```
-<script src="https://cdn.jsdelivr.net/gh/alvinwan/aframe-low-poly@0.0.1/dist/aframe-low-poly.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alvinwan/aframe-low-poly@0.0.3/dist/aframe-low-poly.min.js"></script>
 ```
 
 # Usage
