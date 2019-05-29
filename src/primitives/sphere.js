@@ -9,8 +9,7 @@ LowPolyFactory.simple('sphere', createSphereGeometry, {
 });
 
 function createSphereGeometry(data) {
-  console.log(data);
-  return new THREE.SphereGeometry(data.radius, data.segmentsWidth,
-    data.segmentsHeight, data.phiStart, data.phiLength, data.thetaStart,
-    data.thetaLength);
+  return new THREE.SphereGeometry(
+    data.radius, data.segmentsWidth, data.segmentsHeight, data.phiStart,
+    data.phiLength, data.thetaStart, data.thetaLength);
 }

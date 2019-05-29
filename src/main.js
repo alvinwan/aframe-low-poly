@@ -2,17 +2,21 @@ class LowPoly {
 
   static addMappings(name, mapping) {
     return Object.assign({}, mapping, {
-      'amplitude'           : name + '.amplitude',
-      'amplitude-variance'  : name + '.amplitudeVariance',
-      'seed'                : name + '.seed',
+      'max-amplitude'             : name + '.maxAmplitude',
+      'min-amplitude'             : name + '.minAmplitude',
+      'seed'                      : name + '.seed',
     });
   }
 
+  // TODO: how to handle the below?
+  // core:schema:warn Default value `(x, y, z) => [x, y, z]` does not match type `string` in component
   static addSchema(schema) {
     return Object.assign({}, schema, {
       // Randomness amplitude and variance.
-      amplitude: {default: 0.05},
-      amplitudeVariance: {default: 0.001},
+      maxAmplitude      : {default: {x: 0.1, y: 0.1, z: 0.1}, type: 'vec3'},
+      minAmplitude      : {default: {x: 0, y: 0, z: 0}, type: 'vec3'},
+      positionFunction  : {default: (x, y, z) => { return {x: x, y: y, z: z} }},
+      amplitudePDF      : {default: p => p},
 
       // Material.
       flatShading: {default: true},
@@ -59,24 +63,31 @@ class LowPoly {
       for (let v, i = 0, l = geometry.vertices.length; i < l; i++) {
         v = geometry.vertices[i];
 
-        LowPoly.randomizeVertexDimension(v, 'x', data.amplitude, data.amplitudeVariance);
-        LowPoly.randomizeVertexDimension(v, 'y', data.amplitude, data.amplitudeVariance);
-        LowPoly.randomizeVertexDimension(v, 'z', data.amplitude, data.amplitudeVariance);
+        var root = LowPoly.computeRootPosition(v, data.positionFunction);
+        LowPoly.randomizeVertexDimension(v, 'x', root.x, data.amplitudePDF, data.maxAmplitude.x, data.minAmplitude.x);
+        LowPoly.randomizeVertexDimension(v, 'y', root.y, data.amplitudePDF, data.maxAmplitude.y, data.minAmplitude.y);
+        LowPoly.randomizeVertexDimension(v, 'z', root.z, data.amplitudePDF, data.maxAmplitude.z, data.minAmplitude.z);
       }
       geometry.verticesNeedUpdate = true;
   }
 
-  static randomizeVertexDimension(vertex, dimension, amplitude, amplitudeVariance) {
-    let ang = Random.random() * Math.PI * 2,
-        amp = amplitude + Random.random() * amplitudeVariance;
+  static computeRootPosition(vertex, positionFunction) {
 
-    const key = 'original-' + dimension;
-    if (!(key in vertex)) {
-      vertex[key] = vertex[dimension];
-    }
-    var value = vertex[key];
+    ['x', 'y', 'z'].forEach(function (dimension) {
+      var key = 'o' + dimension;
+      if (!(key in vertex)) {
+        vertex[key] = vertex[dimension];
+      }
+    })
 
-    vertex[dimension] = value + Math.sin(ang) * amp;
+    return positionFunction(vertex['ox'], vertex['oy'], vertex['oz'])
+  }
+
+  static randomizeVertexDimension(vertex, dimension, root, amplitudePDF, maxAmplitude, minAmplitude) {
+    let p = amplitudePDF(Random.random());
+    let amp = (maxAmplitude - minAmplitude) * p + minAmplitude;
+    var value = vertex['o' + dimension];
+    vertex[dimension] = value + amp;
   }
 }
 
@@ -108,6 +119,7 @@ class LowPolyFactory {
       mappings: LowPoly.addMappings(componentName, primitiveMapping)
     }));
 
+    console.log(LowPoly.addSchema(componentSchema));
     AFRAME.registerComponent(componentName, {
       schema: LowPoly.addSchema(componentSchema),
 

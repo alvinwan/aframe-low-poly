@@ -6,5 +6,6 @@ LowPolyFactory.simple('plane', createPlaneGeometry, {
 })
 
 function createPlaneGeometry(data) {
-  return new THREE.PlaneGeometry(data.width, data.height, data.segmentsWidth, data.segmentsHeight);
+  return new THREE.PlaneGeometry(
+    data.width, data.height, data.segmentsWidth, data.segmentsHeight);
 }

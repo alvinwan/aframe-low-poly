@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Stylized Low Poly Tree in Virtual Reality</title>
+    <title>Stylized Low Poly Wilderness in Virtual Reality</title>
     <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="../src/main.js"></script>
@@ -18,12 +18,12 @@
       $(document).ready(function() {
         var t =0;
         setInterval(function() {
+          t += 1;
+          seed = 'seed' + t;
           $('.reseed').each(function() {
-            t += 1;
-            seed = 'seed' + t;
             $(this).attr('seed', seed);
-            console.log(seed);
-          })
+          });
+          console.log(seed);
         }, 1000);
       })
     </script>
@@ -62,23 +62,23 @@
       <a-entity id="carousel" rotation="0 30 0">
         <a-cylinder radius-top="0.01" radius="0.01" color="#333" height="10" position="0 5 0"></a-cylinder>
         <a-entity id="tree1" shadow>
-          <lp-sphere radius="1.5" color="#A5602D" rotation="90 0 0" phi-length="3.14" theta-length="3.14">
+          <lp-sphere radius="1.5" color="#A5602D" rotation="90 0 0" phi-length="3.14" theta-length="3.14" max-amplitude="0.05 0 0.05" class="reseed">
             <a-circle radius="1.6" side="back" color="#A5602D"></a-circle>
             <lp-plane class="reseed" side="double" mixin="foliage-light"></lp-plane>
           </lp-sphere>
           <a-entity class="tree" position="0 1 0">
             <lp-cylinder class="trunk reseed" radius-top="0.01" radius-bottom="0.1" height="2" color="#A5602D"></lp-cylinder>
-            <lp-cone class="reseed" radius="0.35" height="1" segments-height="5" amplitude="0.02" amplitude-variance="0.01" mixin="foliage" position="0 1.4 0"></lp-cone>
-            <lp-cone class="reseed" radius="0.5" height="0.8" segments-height="3" amplitude-variance="0.01" mixin="foliage" position="0 0.8 0" seed="1"></lp-cone>
-            <lp-cone class="reseed" radius="0.6" height="0.8" segments-height="3" amplitude-variance="0.01" mixin="foliage" position="0 0.4 0" seed="2"></lp-cone>
-            <lp-cone class="reseed" radius="0.7" height="0.8" segments-height="3" amplitude-variance="0.01" mixin="foliage" position="0 0 0" seed="3"></lp-cone>
+            <lp-cone class="reseed" radius="0.35" height="1" segments-height="5" amplitude="0.02" mixin="foliage" position="0 1.4 0"></lp-cone>
+            <lp-cone class="reseed" radius="0.5" height="0.8" segments-height="3" mixin="foliage" position="0 0.8 0" seed="1"></lp-cone>
+            <lp-cone class="reseed" radius="0.6" height="0.8" segments-height="3" mixin="foliage" position="0 0.4 0" seed="2"></lp-cone>
+            <lp-cone class="reseed" radius="0.7" height="0.8" segments-height="3" mixin="foliage" position="0 0 0" seed="3"></lp-cone>
           </a-entity>
           <a-entity class="tree" scale="0.75 0.75 0.75" position="1 0.75 0">
             <lp-cylinder class="trunk reseed" radius-top="0.02" radius-bottom="0.3" height="2.5" color="#795110" position="0 0.25 0"></lp-cylinder>
             <lp-sphere class="reseed" position="0 0.6 0" color="#59810C" radius="1" segments-width="10" segments-height="10" amplitude="0.2" low-poly-sphere></lp-sphere>
           </a-entity>
           <a-entity class="tree" scale="0.75 0.75 0.75" position="0 0.75 -1">
-            <lp-cylinder class="trunk" radius-top="0.02" radius-bottom="0.3" height="2.5" color="#795110" position="0 0.25 0"></lp-cylinder>
+            <lp-cylinder class="trunk reseed" radius-top="0.02" radius-bottom="0.3" height="2.5" color="#795110" position="0 0.25 0"></lp-cylinder>
             <lp-sphere class="reseed" position="0 0.8 0" color="#59810C" radius="1" segments-width="8" segments-height="8" amplitude="0.2" low-poly-sphere></lp-sphere>
           </a-entity>
           <a-entity class="rocks">
@@ -90,25 +90,25 @@
 
       <a-entity class="cloud" position="-1 3 0">
         <a-cylinder radius-top="0.01" radius="0.01" color="#333" height="5" position="0 2.5 0"></a-cylinder>
-        <lp-box class="reseed" rotation="20 0 5" position="-0.5 0 0" color="#c6e0ef" height="0.5" width="0.5" depth="0.5" segments-height="2" segments-width="2" segments-depth="2" amplitude-variance="0.05" amplitude="0"></lp-box>
-        <lp-box class="reseed" rotation="0 15 0" color="#c6e0ef" height="0.65" width="0.65" depth="0.65" segments-height="2" segments-width="2" segments-depth="2" amplitude-variance="0.05" amplitude="0"></lp-box>
-        <lp-box class="reseed" rotation="-30 -10 0" position="0.5 0 0" color="#c6e0ef" height="0.5" width="0.5" depth="0.5" segments-height="2" segments-width="2" segments-depth="2" amplitude-variance="0.05" amplitude="0"></lp-box>
+        <lp-box class="reseed" rotation="20 0 5" position="-0.5 0 0" color="#c6e0ef" height="0.5" width="0.5" depth="0.5" segments-height="2" segments-width="2" segments-depth="2" ></lp-box>
+        <lp-box class="reseed" rotation="0 15 0" color="#c6e0ef" height="0.65" width="0.65" depth="0.65" segments-height="2" segments-width="2" segments-depth="2" ></lp-box>
+        <lp-box class="reseed" rotation="-30 -10 0" position="0.5 0 0" color="#c6e0ef" height="0.5" width="0.5" depth="0.5" segments-height="2" segments-width="2" segments-depth="2" ></lp-box>
         <a-animation attribute="position" from="-2.5 3 0" to="-1 3 0" direction="alternate" repeat="indefinite" dur="10000"></a-animation>
       </a-entity>
 
       <a-entity id="cloud" position="-1 2 0">
         <a-cylinder radius-top="0.01" radius="0.01" color="#333" height="5" position="0 2.5 0"></a-cylinder>
-        <lp-box class="reseed" rotation="20 0 5" position="-0.5 0 0" color="#c6e0ef" height="0.5" width="0.5" depth="0.5" segments-height="2" segments-width="2" segments-depth="2" amplitude-variance="0.05" amplitude="0"></lp-box>
-        <lp-box class="reseed" rotation="0 15 0" color="#c6e0ef" height="0.65" width="0.65" depth="0.65" segments-height="2" segments-width="2" segments-depth="2" amplitude-variance="0.05" amplitude="0"></lp-box>
-        <lp-box class="reseed" rotation="-30 -10 0" position="0.5 0 0" color="#c6e0ef" height="0.5" width="0.5" depth="0.5" segments-height="2" segments-width="2" segments-depth="2" amplitude-variance="0.05" amplitude="0"></lp-box>
+        <lp-box class="reseed" rotation="20 0 5" position="-0.5 0 0" color="#c6e0ef" height="0.5" width="0.5" depth="0.5" segments-height="2" segments-width="2" segments-depth="2" ></lp-box>
+        <lp-box class="reseed" rotation="0 15 0" color="#c6e0ef" height="0.65" width="0.65" depth="0.65" segments-height="2" segments-width="2" segments-depth="2" ></lp-box>
+        <lp-box class="reseed" rotation="-30 -10 0" position="0.5 0 0" color="#c6e0ef" height="0.5" width="0.5" depth="0.5" segments-height="2" segments-width="2" segments-depth="2" ></lp-box>
         <a-animation attribute="position" from="2 1.5 -1" to="0.5 1.5 -1" direction="alternate" repeat="indefinite" dur="7000"></a-animation>
       </a-entity>
 
       <a-entity id="cloud" position="-1 2 0">
         <a-cylinder radius-top="0.01" radius="0.01" color="#333" height="5" position="0 2.5 0"></a-cylinder>
-        <lp-box class="reseed" rotation="20 0 5" position="-0.5 0 0" color="#c6e0ef" height="0.5" width="0.5" depth="0.5" segments-height="2" segments-width="2" segments-depth="2" amplitude-variance="0.05" amplitude="0"></lp-box>
-        <lp-box class="reseed" rotation="0 15 0" color="#c6e0ef" height="0.65" width="0.65" depth="0.65" segments-height="2" segments-width="2" segments-depth="2" amplitude-variance="0.05" amplitude="0"></lp-box>
-        <lp-box class="reseed" rotation="-30 -10 0" position="0.5 0 0" color="#c6e0ef" height="0.5" width="0.5" depth="0.5" segments-height="2" segments-width="2" segments-depth="2" amplitude-variance="0.05" amplitude="0"></lp-box>
+        <lp-box class="reseed" rotation="20 0 5" position="-0.5 0 0" color="#c6e0ef" height="0.5" width="0.5" depth="0.5" segments-height="2" segments-width="2" segments-depth="2" ></lp-box>
+        <lp-box class="reseed" rotation="0 15 0" color="#c6e0ef" height="0.65" width="0.65" depth="0.65" segments-height="2" segments-width="2" segments-depth="2" ></lp-box>
+        <lp-box class="reseed" rotation="-30 -10 0" position="0.5 0 0" color="#c6e0ef" height="0.5" width="0.5" depth="0.5" segments-height="2" segments-width="2" segments-depth="2" ></lp-box>
         <a-animation attribute="position" from="3 0.5 0.5" to="2.5 0.5 0.5" direction="alternate" repeat="indefinite" dur="3000"></a-animation>
       </a-entity>
 

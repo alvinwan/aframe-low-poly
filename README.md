@@ -28,9 +28,25 @@ To get started, include the minified javascript in your a-frame project.
 
 Every low-poly object supports the following attributes:
 
-- `amplitude`: Amount of perturbation for each vertex
-- `amplitude-variance`: Variance in amount of perturbation for each vertex
-- `seed`: Seed for random-number generator, allowing you to fix randomness during design
+**`position-function: function(x, y, z)`**
+
+Function that accepts the vertex's *original position* and outputs the vertex's new position, or *root position*. This is applied *before* customizable randomization. All random perturbations are applied to the vertex's root position.
+
+**`max-amplitude: <x double> <y double> <z double>`**
+
+**`min-amplitude: <x double> <y double> <z double>`**
+
+Maximum and minimum amount of perturbation allowed for each vertex. The vertex will not be moved more or less than this amount away from the root position.
+
+**`seed`**
+
+Seed for random-number generator, allowing you to fix randomness during design
+
+> **`max-amplitude-difference: <x double> <y double> <z double>`** *coming soon*
+>
+> **`min-amplitude-difference: <x double> <y double> <z double>`** *coming soon*
+>
+> Maximum and minimum difference in perturbation between adjacent points.
 
 Projects that use `aframe-low-poly`:
 

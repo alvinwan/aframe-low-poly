@@ -9,5 +9,6 @@ LowPolyFactory.simple('box', createBoxGeometry, {
 
 function createBoxGeometry(data) {
   return new THREE.BoxGeometry(
-    data.width, data.height, data.depth, data.segmentsWidth, data.segmentsHeight, data.segmentsDepth);
+    data.width, data.height, data.depth, data.segmentsWidth,
+    data.segmentsHeight, data.segmentsDepth);
 }

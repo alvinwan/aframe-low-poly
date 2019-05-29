@@ -6,5 +6,6 @@ LowPolyFactory.simple('circle', createCircleGeometry, {
 })
 
 function createCircleGeometry(data) {
-  return new THREE.CircleGeometry(data.radius, data.segments, data.thetaStart, data.thetaLength);
+  return new THREE.CircleGeometry(
+    data.radius, data.segments, data.thetaStart, data.thetaLength);
 }
