@@ -73,7 +73,16 @@ LowPolyTerrain.registerCurvature('sine', function (vertex, min, max) {
 
 ## Cloning
 
-Duplicate entire entities without repeating common HTML. For example, say you have a template tree and many trees in your environment. Simply create one tree, and use the `a-clone` object for the rest, changing the position and rotating as necessary. This keeps your code streamlined and eases development (e.g., changing tree trunks for all cloned trees involves a single-line change)
+**`clone=<selector>`**
+
+Duplicate entire entities without repeating common HTML. For example, say you have a template tree and many trees in your environment. Simply create one tree, and use the `clone` attribute for the rest, changing the position and rotating as necessary. This keeps your code streamlined and eases development (e.g., changing tree trunks for all cloned trees involves a single-line change)
+
+Example:
+
+```
+<a-entity id="tree" ... ></a-entity>
+<a-entity clone="#tree"></a-entity>
+```
 
 ## Projects
 
