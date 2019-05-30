@@ -134,7 +134,7 @@ class LowPolyTerrain {
           this.curvature_initialized = true;
           LowPolyTerrain.updateCurvature(this, computePosition);
         }
-      }
+      },
     });
   }
 

@@ -32,12 +32,17 @@
             $(this).attr('seed', seed);
           });
           console.log(seed);
-        }, 1000);
+        }, 3000);
       })
     </script>
+    <style>
+html {
+  background-color:#333;
+}
+    </style>
   </head>
   <body>
-    <a-scene fog="type: linear; color: #fff; near:5; far:15">
+    <a-scene fog="type: linear; color: #333; near:5; far:15">
 
       <!-- Mixins -->
       <a-assets>
@@ -54,10 +59,10 @@
       <a-entity light="
           type: directional;
           castShadow: true;
-          intensity: 0.4;
+          intensity: 0.6;
           color: #FFF;"
         position="5 3 1"></a-entity>
-      <a-light intensity="0.8" type="ambient" position="1 1 1" color="#FFF"></a-light>
+      <a-light intensity="0.6" type="ambient" position="1 1 1" color="#FFF"></a-light>
 
       <!-- Camera! -->
       <a-entity id="rig" position="0 1 5">
@@ -65,7 +70,7 @@
       </a-entity>
 
       <!-- Action! -->
-      <a-box shadow width="50" height="0.1" depth="40" position="0 -1 0" color="#ccc"></a-box>
+      <a-box shadow width="50" height="0.1" depth="40" position="0 -1 0" color="#222"></a-box>
 
       <a-entity id="carousel" rotation="0 30 0">
         <a-cylinder radius-top="0.01" radius="0.01" color="#333" height="10" position="0 5 0"></a-cylinder>
