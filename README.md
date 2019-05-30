@@ -28,27 +28,50 @@ To get started, include the minified javascript in your a-frame project.
 
 # Usage
 
+## Attributes
+
 Every low-poly object supports the following attributes. Modify the following attributes just like you would any other AFrame VR attribute:
 
 **`max-amplitude: <x double> <y double> <z double>`**
 
 **`min-amplitude: <x double> <y double> <z double>`**
 
-Maximum and minimum amount of perturbation allowed for each vertex. The vertex will not be moved more or less than this amount away from the root position.
+Maximum and minimum amount of perturbation allowed for each vertex. The vertex will not be moved more or less than this amount away from the original position.
+
+Example:
+
+```
+<lp-plane max-amplitude="1 0 0" min-amplitude="0.5 0 0"></lp-plane>
+```
 
 **`seed`**
 
-Seed for random-number generator, allowing you to fix randomness during design
-
-**`position-function: function({x, y, z, min: {x, y, z}, max: {x, y, z}})`**
-
-Function that accepts the vertex's *original position* and outputs the vertex's new position, or *root position*. This is applied *before* customizable randomization. All random perturbations are applied to the vertex's root position.
+Seed for random-number generator, allowing you to fix randomness during design.
 
 > **`max-amplitude-difference: <x double> <y double> <z double>`** *coming soon*
 >
 > **`min-amplitude-difference: <x double> <y double> <z double>`** *coming soon*
 >
-> Maximum and minimum difference in perturbation between adjacent points.
+> Maximum and minimum difference in perturbation between adjacent points. For now,
+> use the curvature specification below to achieve a similar effect.
+
+## Terrain
+
+**`LowPolyTerrain.registerCurvature(componentName, function({x, y, z}, {xmin, ymin, zmin}, {xmax, ymax, zmax})`**
+
+Allows you to specify curvature of the surface. Function that accepts the vertex's *original position* and outputs the vertex's new position. This is applied *before* customizable randomization. All random perturbations are applied to the vertex's new position.
+
+Example:
+
+```
+LowPolyTerrain.registerCurvature('sine', function (vertex, min, max) {
+    var py = (vertex.y - min.y) / (max.y - min.y);
+    var z = Math.sin(py * 2 * Math.PI) + min.z;
+    return {x: vertex.x, y: vertex.y, z: z}
+});
+```
+
+## Projects
 
 Projects that use `aframe-low-poly`:
 

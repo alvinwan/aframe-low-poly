@@ -15,14 +15,14 @@
     <script src="../src/primitives/cone.js"></script>
     <!-- Google Analytics -->
     <script>
-      $(document).ready(function() {
-        // setup "sky" so that it's sinusoidal
-        document.querySelector('#ground').setAttribute('position-function', function (position) {
-            var py = (position.y - position.min.y) / (position.max.y - position.min.y);
-            var z1 = Math.sin(py * 2 * Math.PI) * 1 + position.min.z;
-            return {x: position.x, y: position.y, z: z1}
-        });
+    // setup "sky" so that it's sinusoidal
+    LowPolyTerrain.registerCurvature('sine', function (vertex, min, max) {
+        var py = (vertex.y - min.y) / (max.y - min.y);
+        var z = Math.sin(py * 2 * Math.PI) + min.z;
+        return {x: vertex.x, y: vertex.y, z: z}
+    });
 
+      $(document).ready(function() {
         // change seed every second
         var t = 0;
         setInterval(function() {
@@ -127,7 +127,7 @@
         <a-animation attribute="position" from="2 3 0" to="2 2.5 0" direction="alternate" repeat="indefinite" dur="5000"></a-animation>
       </a-entity>
 
-      <lp-plane id="ground" color="#609af7" rotation="0 0 90" position="0 0 -3" width="10" height="10" max-amplitude="0.5 0.5 0.25"></lp-plane>
+      <lp-plane sine id="sky" color="#609af7" rotation="0 0 90" position="0 0 -3" width="10" height="10" max-amplitude="0.5 0.5 0.25"></lp-plane>
     </a-scene>
   </body>
 </html>

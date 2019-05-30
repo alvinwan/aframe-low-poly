@@ -4,26 +4,20 @@ class LowPoly {
     return Object.assign({}, mapping, {
       'max-amplitude'             : name + '.maxAmplitude',
       'min-amplitude'             : name + '.minAmplitude',
-      'position-function'         : name + '.positionFunction',
       'seed'                      : name + '.seed',
     });
   }
 
-  // TODO: how to handle the below?
-  // core:schema:warn Default value `(x, y, z) => [x, y, z]` does not match type `string` in component
   static addSchema(schema) {
     return Object.assign({}, schema, {
       // Randomness amplitude and variance.
       maxAmplitude      : {default: {x: 0.1, y: 0.1, z: 0.1}, type: 'vec3'},
       minAmplitude      : {default: {x: 0, y: 0, z: 0}, type: 'vec3'},
-      positionFunction  : {default: position => { return {x: position.x, y: position.y, z: position.z} }},
       amplitudePDF      : {default: p => p},
+      seed              : {default: "apples"},
 
       // Material.
-      flatShading: {default: true},
-
-      // Randomness
-      seed: {default: "apples"},
+      flatShading       : {default: true},
     });
   }
 
@@ -51,79 +45,27 @@ class LowPoly {
     el.setObject3D('mesh', that.mesh);
   }
 
-  static update(oldData, newData, geometry) {
-    if (!geometry) {
-      console.log('[ERR] Passed geometry in update is invalid.')
-      return;
-    }
-    LowPoly.randomizeVertices(newData, geometry);
-  }
-
   static randomizeVertices(data, geometry) {
       Random.seed(data.seed);
-      var min = LowPoly.computeMinPosition(geometry.vertices);
-      var max = LowPoly.computeMaxPosition(geometry.vertices);
       for (let v, i = 0, l = geometry.vertices.length; i < l; i++) {
         v = geometry.vertices[i];
 
-        var root = LowPoly.computeRootPosition(v, data.positionFunction, min, max);
-        LowPoly.randomizeVertexDimension(v, 'x', root.x, data.amplitudePDF, data.maxAmplitude.x, data.minAmplitude.x);
-        LowPoly.randomizeVertexDimension(v, 'y', root.y, data.amplitudePDF, data.maxAmplitude.y, data.minAmplitude.y);
-        LowPoly.randomizeVertexDimension(v, 'z', root.z, data.amplitudePDF, data.maxAmplitude.z, data.minAmplitude.z);
+        LowPoly.randomizeVertexDimension(v, 'x', data.amplitudePDF, data.maxAmplitude.x, data.minAmplitude.x);
+        LowPoly.randomizeVertexDimension(v, 'y', data.amplitudePDF, data.maxAmplitude.y, data.minAmplitude.y);
+        LowPoly.randomizeVertexDimension(v, 'z', data.amplitudePDF, data.maxAmplitude.z, data.minAmplitude.z);
       }
       geometry.verticesNeedUpdate = true;
   }
 
-  static computeMinPosition(vertices) {
-    var min = {x: Infinity, y: Infinity, z: Infinity};
-    for (let v, i = 0, l = vertices.length; i < l; i++) {
-      v = vertices[i];
-      min.x = Math.min(v.x, min.x);
-      min.y = Math.min(v.y, min.y);
-      min.z = Math.min(v.z, min.z);
+  static randomizeVertexDimension(vertex, dim, amplitudePDF, maxAmplitude, minAmplitude) {
+    let p = amplitudePDF(Random.random()),
+        ori = 'o' + dim,
+        amp = (maxAmplitude - minAmplitude) * p + minAmplitude;
+
+    if (!(ori in vertex)) {
+      vertex[ori] = vertex[dim];
     }
-    return min;
-  }
-
-  static computeMaxPosition(vertices) {
-    var max = {x: -Infinity, y: -Infinity, z: -Infinity};
-    for (let v, i = 0, l = vertices.length; i < l; i++) {
-      v = vertices[i];
-      max.x = Math.max(v.x, max.x);
-      max.y = Math.max(v.y, max.y);
-      max.z = Math.max(v.z, max.z);
-    }
-    return max;
-  }
-
-  static computeRootPosition(vertex, positionFunction, min, max) {
-
-    ['x', 'y', 'z'].forEach(function (dimension) {
-      var key = 'o' + dimension;
-      if (!(key in vertex)) {
-        vertex[key] = vertex[dimension];
-      }
-    })
-
-    // TODO: hack to support funnctions in attributes... not a good idea
-    if (typeof positionFunction === 'string') {
-      eval("positionFunction = " + positionFunction);
-    }
-
-    return positionFunction({
-      x: vertex['ox'],
-      y: vertex['oy'],
-      z: vertex['oz'],
-      min: min,
-      max: max
-    })
-  }
-
-  static randomizeVertexDimension(vertex, dimension, root, amplitudePDF, maxAmplitude, minAmplitude) {
-    let p = amplitudePDF(Random.random());
-    let amp = (maxAmplitude - minAmplitude) * p + minAmplitude;
-    var value = root;
-    vertex[dimension] = value + amp;
+    vertex[dim] = vertex[ori] + amp;
   }
 }
 
@@ -155,7 +97,6 @@ class LowPolyFactory {
       mappings: LowPoly.addMappings(componentName, primitiveMapping)
     }));
 
-    console.log(LowPoly.addSchema(componentSchema));
     AFRAME.registerComponent(componentName, {
       schema: LowPoly.addSchema(componentSchema),
 
@@ -175,7 +116,79 @@ class LowPolyFactory {
   }
 }
 
+class LowPolyTerrain {
+
+  static registerCurvature(componentName, computePosition) {
+    AFRAME.registerComponent(componentName, {
+      init: function() {
+        this.curvature_initialized = false;
+      },
+
+      tick: function (time, delta) {
+        if (!this.curvature_initialized) {
+          // Place in tick, as tick occurs pre-render
+          this.curvature_initialized = true;
+          var geometry = this.el.getObject3D('mesh').geometry;
+          var min = LowPolyTerrain.computeMinPosition(geometry.vertices);
+          var max = LowPolyTerrain.computeMaxPosition(geometry.vertices);
+
+          for (let v, i = 0, l = geometry.vertices.length; i < l; i++) {
+            v = geometry.vertices[i];
+
+            var position = computePosition(v, min, max);
+            v.x = position.x;
+            v.y = position.y;
+            v.z = position.z;
+          }
+          geometry.verticesNeedUpdate = true;
+        }
+      }
+    })
+  }
+
+  static computeMinPosition(vertices) {
+    var min = {x: Infinity, y: Infinity, z: Infinity};
+    for (let v, i = 0, l = vertices.length; i < l; i++) {
+      v = vertices[i];
+      min.x = Math.min(v.x, min.x);
+      min.y = Math.min(v.y, min.y);
+      min.z = Math.min(v.z, min.z);
+    }
+    return min;
+  }
+
+  static computeMaxPosition(vertices) {
+    var max = {x: -Infinity, y: -Infinity, z: -Infinity};
+    for (let v, i = 0, l = vertices.length; i < l; i++) {
+      v = vertices[i];
+      max.x = Math.max(v.x, max.x);
+      max.y = Math.max(v.y, max.y);
+      max.z = Math.max(v.z, max.z);
+    }
+    return max;
+  }
+}
+
+/**
+ * Utilities
+ */
+
+function capitalizeFirstLetter(string) {
+   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function lowercaseFirstLetter(string) {
+    return string.charAt(0).toLowerCase() + string.slice(1);
+}
+
+function hyphenatedToCamel(hyphenated) {
+  return lowercaseFirstLetter(hyphenated.split("-")
+   .map(token => capitalizeFirstLetter(token))
+   .join(""));
+}
+
 class Random {
+  // Seeded prng
   // https://stackoverflow.com/a/47593316/4855984
 
   static seed(seed) {
@@ -208,22 +221,4 @@ class Random {
   static random() {
     return this.random();
   }
-}
-
-/**
- * String Utilities
- */
-
-function capitalizeFirstLetter(string) {
-   return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function lowercaseFirstLetter(string) {
-    return string.charAt(0).toLowerCase() + string.slice(1);
-}
-
-function hyphenatedToCamel(hyphenated) {
-  return lowercaseFirstLetter(hyphenated.split("-")
-   .map(token => capitalizeFirstLetter(token))
-   .join(""));
 }
