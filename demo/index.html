@@ -6,6 +6,7 @@
     <title>Stylized Low Poly Wilderness in Virtual Reality</title>
     <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://samsunginternet.github.io/a-frame-components/dist/clone.js"></script>
     <script src="../src/main.js"></script>
     <script src="../src/primitives/box.js"></script>
     <script src="../src/primitives/circle.js"></script>
@@ -81,14 +82,11 @@
             <lp-cone class="reseed" radius="0.6" height="0.8" segments-height="3" mixin="foliage" position="0 0.4 0" seed="2"></lp-cone>
             <lp-cone class="reseed" radius="0.7" height="0.8" segments-height="3" mixin="foliage" position="0 0 0" seed="3"></lp-cone>
           </a-entity>
-          <a-entity class="tree" scale="0.75 0.75 0.75" position="1 0.75 0">
+          <a-entity class="tree" id="tree" scale="0.75 0.75 0.75" position="1 0.75 0">
             <lp-cylinder class="trunk reseed" radius-top="0.02" radius-bottom="0.3" height="2.5" color="#795110" position="0 0.25 0"></lp-cylinder>
             <lp-sphere class="reseed" position="0 0.6 0" color="#59810C" radius="1" segments-width="10" segments-height="10" low-poly-sphere></lp-sphere>
           </a-entity>
-          <a-entity class="tree" scale="0.75 0.75 0.75" position="0 0.75 -1">
-            <lp-cylinder class="trunk reseed" radius-top="0.02" radius-bottom="0.3" height="2.5" color="#795110" position="0 0.25 0"></lp-cylinder>
-            <lp-sphere class="reseed" position="0 0.8 0" color="#59810C" radius="1" segments-width="8" segments-height="8" low-poly-sphere></lp-sphere>
-          </a-entity>
+          <a-clone clone="tree" position="0 0.75 -1"></a-clone>
           <a-entity class="rocks">
             <lp-sphere class="reseed" color="#666" radius="0.25" position="0 0 1"></lp-sphere>
             <lp-sphere class="reseed" color="#666" radius="0.3" position="-0.5 0 1" rotation="0 45 0"></lp-sphere>

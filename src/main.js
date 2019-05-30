@@ -116,6 +116,10 @@ class LowPolyFactory {
   }
 }
 
+/**
+ * Terrain
+ **/
+
 class LowPolyTerrain {
 
   static registerCurvature(componentName, computePosition) {
