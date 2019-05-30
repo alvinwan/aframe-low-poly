@@ -132,22 +132,29 @@ class LowPolyTerrain {
         if (!this.curvature_initialized) {
           // Place in tick, as tick occurs pre-render
           this.curvature_initialized = true;
-          var geometry = this.el.getObject3D('mesh').geometry;
-          var min = LowPolyTerrain.computeMinPosition(geometry.vertices);
-          var max = LowPolyTerrain.computeMaxPosition(geometry.vertices);
-
-          for (let v, i = 0, l = geometry.vertices.length; i < l; i++) {
-            v = geometry.vertices[i];
-
-            var position = computePosition(v, min, max);
-            v.x = position.x;
-            v.y = position.y;
-            v.z = position.z;
-          }
-          geometry.verticesNeedUpdate = true;
+          LowPolyTerrain.updateCurvature(this, computePosition);
         }
       }
-    })
+    });
+  }
+
+  static updateCurvature(that, computePosition) {
+    var geometry = that.el.getObject3D('mesh').geometry;
+    var min = LowPolyTerrain.computeMinPosition(geometry.vertices);
+    var max = LowPolyTerrain.computeMaxPosition(geometry.vertices);
+
+    for (let v, i = 0, l = geometry.vertices.length; i < l; i++) {
+      v = geometry.vertices[i];
+
+      var position = computePosition(v, min, max);
+      v.x = position.x;
+      v.y = position.y;
+      v.z = position.z;
+      v.ox = position.x;
+      v.oy = position.y;
+      v.oz = position.z;
+    }
+    geometry.verticesNeedUpdate = true;
   }
 
   static computeMinPosition(vertices) {
@@ -172,6 +179,23 @@ class LowPolyTerrain {
     return max;
   }
 }
+
+/**
+ * Cloning
+ */
+
+AFRAME.registerComponent('clone', {
+	schema: {
+		type: 'selector'
+	},
+
+  // originally taken from https://github.com/SamsungInternet/a-frame-components/blob/master/dist/clone.js
+	init: function () {
+		var clone = this.data.object3D.clone(true);
+		clone.visible = true;
+		this.el.setObject3D('clone', clone);
+	}
+});
 
 /**
  * Utilities

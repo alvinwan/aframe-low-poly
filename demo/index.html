@@ -6,7 +6,6 @@
     <title>Stylized Low Poly Wilderness in Virtual Reality</title>
     <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://samsunginternet.github.io/a-frame-components/dist/clone.js"></script>
     <script src="../src/main.js"></script>
     <script src="../src/primitives/box.js"></script>
     <script src="../src/primitives/circle.js"></script>
@@ -19,7 +18,7 @@
     // setup "sky" so that it's sinusoidal
     LowPolyTerrain.registerCurvature('sine', function (vertex, min, max) {
         var py = (vertex.y - min.y) / (max.y - min.y);
-        var z = Math.sin(py * 2 * Math.PI) + min.z;
+        var z = Math.sin(py * 2 * Math.PI) + vertex.z;
         return {x: vertex.x, y: vertex.y, z: z}
     });
 
@@ -84,9 +83,9 @@
           </a-entity>
           <a-entity class="tree" id="tree" scale="0.75 0.75 0.75" position="1 0.75 0">
             <lp-cylinder class="trunk reseed" radius-top="0.02" radius-bottom="0.3" height="2.5" color="#795110" position="0 0.25 0"></lp-cylinder>
-            <lp-sphere class="reseed" position="0 0.6 0" color="#59810C" radius="1" segments-width="10" segments-height="10" low-poly-sphere></lp-sphere>
+            <lp-sphere class="reseed" position="0 0.6 0" color="#59810C" radius="1" segments-width="10" segments-height="10"></lp-sphere>
           </a-entity>
-          <a-clone clone="tree" position="0 0.75 -1"></a-clone>
+          <a-entity clone="#tree" position="0 0.75 -1"></a-entity>
           <a-entity class="rocks">
             <lp-sphere class="reseed" color="#666" radius="0.25" position="0 0 1"></lp-sphere>
             <lp-sphere class="reseed" color="#666" radius="0.3" position="-0.5 0 1" rotation="0 45 0"></lp-sphere>
