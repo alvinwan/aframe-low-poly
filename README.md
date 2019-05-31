@@ -1,32 +1,27 @@
-You can view the demo pictured below at [aaalv.in/vr/low-poly-trees](http://alvinwan.com/vr/low-poly-trees).
+# A-Frame Low Poly
+
+Low poly add-ons for a-frame virtual reality models. [View the aframe low-poly demo &raquo;](http://alvinwan.com/aframe-low-poly/demo)
+
+<img width="1429" alt="Screen Shot 2019-05-30 at 11 42 04 PM" src="https://user-images.githubusercontent.com/2068077/58686776-969e3700-8334-11e9-8b91-2ed7b0a5c56a.png">
+
+Take any existing a-frame primitive, such as `a-sphere` and replace the prefix to obtain a low-poly
+version, such as `lp-sphere`. For example, the below is a low-poly sphere for a tree's foliage:
+
+```
+<lp-sphere color="#59810C" max-amplitude="0.2" position="0 0.6 0"></lp-sphere>
+```
+
+The above spheres are used in the demo pictured below at [aaalv.in/vr/low-poly-trees](http://alvinwan.com/vr/low-poly-trees). For more, see [aaalv.in/vr](http://alvinwan.com/vr)
 
 <img width="1203" alt="screen shot 2018-11-24 at 11 32 11 pm" src="https://user-images.githubusercontent.com/2068077/48976744-31921d80-f041-11e8-8aa3-1959bc6fa65b.png">
 
-# A-Frame Low Poly
+# Usage
 
-[View the aframe low-poly demo &raquo;](http://alvinwan.com/aframe-low-poly/demo)
-
-Low poly add-ons for a-frame virtual reality models. Take any existing a-frame
-primitive, such as `a-sphere` and replace the prefix to obtain a low-poly
-version, such as `lp-sphere`. For example, the below is a low-poly sphere
-for a tree's foliage:
-
-```
-<lp-sphere position="0 0.6 0"
-           color="#59810C"
-           radius="1"
-           segments-width="10"
-           segments-height="10"
-           amplitude="0.2"></lp-sphere>
-```
-
-To get started, include the minified javascript in your a-frame project.
+Looks like what you need? To get started, include the minified javascript in your a-frame project.
 
 ```
 <script src="https://cdn.jsdelivr.net/gh/alvinwan/aframe-low-poly@0.0.5/dist/aframe-low-poly.min.js"></script>
 ```
-
-# Usage
 
 ## Low-Poly Attributes
 
