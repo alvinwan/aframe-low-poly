@@ -23,7 +23,7 @@ for a tree's foliage:
 To get started, include the minified javascript in your a-frame project.
 
 ```
-<script src="https://cdn.jsdelivr.net/gh/alvinwan/aframe-low-poly@0.0.3/dist/aframe-low-poly.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alvinwan/aframe-low-poly@0.0.4/dist/aframe-low-poly.min.js"></script>
 ```
 
 # Usage
